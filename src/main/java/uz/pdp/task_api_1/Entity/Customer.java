@@ -17,11 +17,13 @@ public class Customer {
 
     private Integer id;
 
+    @Column(nullable = false)
     private String fullName;
 
-    @Column(unique = true)
+    @Column(unique = true , nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String addrese;
 
 
