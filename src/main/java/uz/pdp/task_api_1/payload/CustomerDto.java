@@ -6,18 +6,21 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerDto {
 
-    @NonNull
+    @NotBlank(message = "fullname  bolishi kerak")
     private String fullName;
 
-    @NonNull
+    @NotBlank(message = "phoneNumber  bolishi kerak")
     private String phoneNumber;
 
-    @NonNull
+    @NotBlank(message = "address bolishi kerak")
     private String addrese;
 
 }

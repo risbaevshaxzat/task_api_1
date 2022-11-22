@@ -42,5 +42,26 @@ public class CustomerService {
 
     }
 
+    public  ApiResponse editCustomer(Integer id , CustomerDto customerDto) {
+        boolean existsByPhoneNumber = customerRepo.existsByPhoneNumberAndIdNot(customerDto.getPhoneNumber(), id);
+        if (existsByPhoneNumber) {
+            return new ApiResponse("Bunday telefon raqamly mijoz mavjud", false);
 
+        }
+        Optional<Customer> optionalCustomer = customerRepo.findById(id);
+        if (!optionalCustomer.isPresent()) {
+            return new ApiResponse("Nunday mijoz mavjud emas", false);
+        }
+        Customer customer = optionalCustomer.get();
+        customer.setFullName(customerDto.getFullName());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setAddrese(customerDto.getAddrese());
+        customerRepo.save(customer);
+        return new ApiResponse("Mijoz taxrirlandi ", true);
+    }
+
+    public ApiResponse deleteCust(Integer id ){
+        customerRepo.deleteById(id);
+        return new ApiResponse("Mijoz o'chirildi",true);
+    }
 }

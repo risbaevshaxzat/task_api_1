@@ -1,12 +1,12 @@
 package uz.pdp.task_api_1.Controller;
 
-
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.MethodNotAllowedException;
 import uz.pdp.task_api_1.Entity.Customer;
 import uz.pdp.task_api_1.Service.CustomerService;
 import uz.pdp.task_api_1.payload.ApiResponse;
@@ -16,40 +16,39 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @RestController
 @AllArgsConstructor
-public class CustomerController {
-
+public class ControllerSecond {
     private final CustomerService coutomerService;
 
-    @GetMapping("/api/customers")
-    public List<Customer>  getAll(){
+    @GetMapping("/api/customer")
+    public ResponseEntity<List<Customer> > getAll(){
         List<Customer> customerList= coutomerService.getAll();
-        return customerList;
+        return  ResponseEntity.ok(customerList);
     }
-    @GetMapping("/api/customers/{id}")
-    public  Customer getCustomer(@PathVariable Integer id) {
+    @GetMapping("/api/customer/{id}")
+    public  ResponseEntity<?> getCustomer(@PathVariable Integer id) {
         Customer customer = coutomerService.getCustomerById(id);
         //  return id;
-        return  customer;
+        return  ResponseEntity.ok(customer);
     }
-    @PostMapping("/api/customers")
-    public ApiResponse createCustomer(@Valid  @RequestBody CustomerDto customerDto){
+    @PostMapping("/api/customer")
+    public HttpEntity<?> createCustomer(@Valid @RequestBody CustomerDto customerDto){
         ApiResponse apiResponse= coutomerService.addCustomer(customerDto);
-        return  new  ApiResponse("Mijoz qoshildi ",true);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.CREATED :
+                HttpStatus.CONFLICT).body(apiResponse);
     }
 
-    @PutMapping("/api/customers/{id}")
-    public ApiResponse editCustomer(@Valid @PathVariable Integer id , @RequestBody CustomerDto customerDto){
+    @PutMapping("/api/customer/{id}")
+    public ResponseEntity<?> editCustomer(@Valid @PathVariable Integer id , @RequestBody CustomerDto customerDto){
         ApiResponse apiResponse = coutomerService.editCustomer(id , customerDto);
-        return  new ApiResponse("Mijoz yangilandi ", true);
+        return  ResponseEntity.ok(apiResponse);
     }
 
-    @DeleteMapping("/api/customers/{id}")
-    public ApiResponse deleteCustomer(@PathVariable Integer id ){
+    @DeleteMapping("/api/customer/{id}")
+    public ResponseEntity<?> deleteCustomer(@PathVariable Integer id ){
         ApiResponse apiResponse = coutomerService.deleteCust(id);
-        return  apiResponse;
+        return  ResponseEntity.ok(apiResponse);
 
     }
 
